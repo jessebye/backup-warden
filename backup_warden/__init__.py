@@ -807,7 +807,13 @@ class BackupWarden:
                 # We bulk delete for S3 since it has better performance
                 if self.delete and s3_delete_list:
                     if self.s3_only_prefixes:
-                        s3 = boto3.resource("s3")
+                        s3 = boto3.resource(
+                            "s3",
+                            endpoint_url=self.s3_endpoint_url,
+                            aws_access_key_id=self.s3_access_key_id,
+                            aws_secret_access_key=self.s3_secret_access_key,
+                            aws_session_token=self.s3_session_token,
+                        )
                         bucket = s3.Bucket(self.bucket)
                         for item in s3_delete_list:
                             try:
